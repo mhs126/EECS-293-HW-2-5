@@ -1,7 +1,7 @@
 package Parser;
 import java.util.*;
 public final class InternalNode implements Node{
-
+  
   private final List<Node> children;
   
   //a getter that returns a copy of the private children.
@@ -44,4 +44,20 @@ public final class InternalNode implements Node{
     
     return output;
   }
+  
+ public static void main(String[] args){
+    Variable x = new Variable("x");
+    Variable y = new Variable("y");
+    Connector plus = new Connector("+");
+    LeafNode one = new LeafNode(x);
+    LeafNode two = new LeafNode(plus);
+    LeafNode three = new LeafNode(y);
+    List<Node> nodeList = new ArrayList<Node>();
+    nodeList.add(one);
+    nodeList.add(two);
+    nodeList.add(three);
+    InternalNode intNode = new InternalNode(nodeList);
+    System.out.println(intNode.toList());
+  } 
+  
 }
