@@ -1,8 +1,0 @@
-package parser;
-interface Token{
- 
-  TerminalSymbol getType();
-  
-  boolean matches(TerminalSymbol type);
-  
-}
