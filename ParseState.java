@@ -20,19 +20,19 @@ public final class ParseState {
         this.remainder = remainder;
     }
 
-    private final boolean getSuccess(){
+    public final boolean getSuccess(){
         return success;
     }
 
-    private final Node getNode(){
+    public final Node getNode(){
         return node;
     }
 
-    private final List<Token> remainder(){
+    public final List<Token> getRemainder(){
         return remainder;
     }
 
-    private final boolean hasNoRemainder(){
+    public final boolean hasNoRemainder(){
         if(remainder == null)
             return true;
         else

@@ -32,4 +32,11 @@ public final class LeafNode implements Node{
         output.add(token);
         return output;
     }
+
+    public static void main(String[] args){
+        Variable x = Variable.build("x");
+        LeafNode l = LeafNode.build(x);
+        System.out.println(l.toString());
+    }
+
 }
