@@ -13,15 +13,13 @@ final class Cache<T, V> {
         else if(constructor == null){
             throw new NullPointerException("No Function found");
         }
+        else if(cache.get(key) != null){
+            return cache.get(key);
+        }
         else{
-            if(cache.get(key) != null){
-                return cache.get(key);
-            }
-            else{
-                V obj = constructor.apply(key);
-                cache.put(key, obj);
-                return obj;
-            }
+            V obj = constructor.apply(key);
+            cache.put(key, obj);
+            return obj;
         }
     }
 }
