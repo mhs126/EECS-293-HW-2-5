@@ -1,7 +1,7 @@
 package Parser;
-import java.util.*;
+import java.util.List;
 interface Node{
- 
-  List<Token> toList();
-  
+
+    List<Token> toList();
+
 }

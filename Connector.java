@@ -1,76 +1,56 @@
+//Make hash map instead of large switch statements
+//Change constructor input to a TerminalSymbol
 package Parser;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 public final class Connector extends AbstractToken{
-  
-  //A cache to check redundency
-  private static Cache<String, Connector> cache;
-  
-  //A String field
-  private String representation;
-  
-  //A TerminalSymbol field
-  private TerminalSymbol type;
-  
-  //Private Constructor that sets the type
-  private Connector(String rep){
-    this.representation = rep;
-    switch(rep){
-      case "+":
-        this.type = TerminalSymbol.PLUS;
-        break;
-      case "-":
-        this.type = TerminalSymbol.MINUS;
-        break;
-      case "*":
-        this.type = TerminalSymbol.TIMES;
-        break;
-      case "/":
-        this.type = TerminalSymbol.DIVIDE;
-        break;
-      case "(":
-        this.type = TerminalSymbol.OPEN;
-        break;
-      case ")":
-        this.type = TerminalSymbol.CLOSE;
-        break;
+
+    //A cache to check redundancy
+    private static Cache<TerminalSymbol, Connector> cache = new Cache<TerminalSymbol, Connector>();
+
+    //A map containing the connector terminalsymbol values that point to strings
+    private Map<TerminalSymbol, String> map = new HashMap<TerminalSymbol, String>();
+
+    //A TerminalSymbol field
+    private TerminalSymbol type;
+
+    //Private Constructor that sets the type
+    private Connector(TerminalSymbol t){
+        map.put(TerminalSymbol.PLUS, "+");
+        map.put(TerminalSymbol.MINUS, "-");
+        map.put(TerminalSymbol.DIVIDE, "/");
+        map.put(TerminalSymbol.TIMES, "*");
+        map.put(TerminalSymbol.OPEN, "(");
+        map.put(TerminalSymbol.CLOSE, ")");
+        if(map.get(t) == null)
+            throw new NullPointerException("Invalid input");
+        else
+            type = t;
     }
-  }
-  
-  //Not sure what it does exactly, will go over this later
-  public static final Connector build(String rep){
-    try{ 
-      Function<String, Connector> f = (s1) -> new Connector(s1);
-      return cache.get(rep, f);
+
+    //Change to throw a null pointer
+    public static final Connector build(TerminalSymbol t){
+        if(t == null)
+            throw new NullPointerException("No TerminalSymbol found");
+        else{
+            Function<TerminalSymbol, Connector> f = (s) -> new Connector(s);
+            return cache.get(t, f);
+        }
     }
-    catch(NullPointerException E){
-      System.out.println("Null pointer exception");
-      return null;
+
+    //Returns type
+    public TerminalSymbol getType(){
+        return this.type;
     }
-  }
-  
-  //Returns type
-  public TerminalSymbol getType(){
-    return this.type; 
-  }
-  
-  //Returns the type as a string value
-  public String toString(){
-    switch(this.getType()){
-      case PLUS:
-        return "+";
-      case MINUS:
-        return "-";
-      case TIMES:
-        return "*";
-      case DIVIDE:
-        return "/";
-      case OPEN:
-        return "(";
-      case CLOSE:
-        return ")";
+
+    //Returns the type as a string value
+    public String toString(){
+        if(map.get(type) != null)
+            return map.get(type);
+        else
+            throw new NullPointerException("Null Input");
     }
-    throw new NullPointerException("Null Input");
-  }
-  
-}  
+
+}
 
