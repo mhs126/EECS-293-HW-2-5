@@ -52,7 +52,8 @@ public final class InternalNode implements Node{
         return builder.toString();
     }
 
-    public static void main(String[] args){
+    //Main method for testing
+    /*public static void main(String[] args){
         Variable x = Variable.build("x");
         Variable y = Variable.build("y");
         Variable t = Variable.build("t");
@@ -72,7 +73,7 @@ public final class InternalNode implements Node{
         nodeList.add(intNode2);
         InternalNode intNode = InternalNode.build(nodeList);
         System.out.println(intNode.toString());
-    }
+    } */
 
 
 }

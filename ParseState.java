@@ -13,7 +13,7 @@ public final class ParseState {
 
     final static ParseState FAILURE = new ParseState(false, null, null);
 
-
+    //Constructor for ParseState, sets the field variables
     private ParseState(boolean success, Node node, List<Token> remainder){
         this.success = success;
         this.node = node;
@@ -32,6 +32,7 @@ public final class ParseState {
         return remainder;
     }
 
+    //Returns true if remainder is null
     public final boolean hasNoRemainder(){
         if(remainder == null)
             return true;
@@ -39,7 +40,7 @@ public final class ParseState {
             return false;
     }
 
-
+    //build method for ParseState, throws a null pointer if any null input
     public final static ParseState build(Node node, List<Token> remainder){
         if(node == null || remainder == null)
             throw new NullPointerException("Null Argument Given");

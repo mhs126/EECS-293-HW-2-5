@@ -13,14 +13,16 @@ final class SymbolSequence {
         this.production = production;
     }
 
-    private  final static SymbolSequence build(List<Symbol> production){
+    //Build method for SymbolSequence
+    public  final static SymbolSequence build(List<Symbol> production){
         if(production == null)
             throw new NullPointerException("Null List");
         else
             return new SymbolSequence(production);
     }
 
-    private final static SymbolSequence build(Symbol... symbols){
+    //Alternative build method, takes a variable number of args
+    public final static SymbolSequence build(Symbol... symbols){
         List<Symbol> list = new ArrayList<>();
         if(symbols == null)
             throw new NullPointerException("No Symbols Found");
@@ -33,17 +35,21 @@ final class SymbolSequence {
         }
     }
 
+    //Makes the production a string
     public String toString(){
-        String output = "";
-        for (Symbol symbol: production)
-            output = output + "[" + symbol.toString()+ ",";
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int x = 0; x < production.size()-1; x++) {
+            builder.append(production.get(x).toString());
+            builder.append(",");
+        }
 
-        for (int i = 0; i < production.size(); i++)
-            output = output + "]";
-
-        return output;
+        builder.append(production.get(production.size()-1).toString());
+        builder.append("]");
+        return builder.toString();
     }
 
+    //Returns a succesful ParseState if the parse of the remainder if succesful for all  of production
     public ParseState match(List<Token> input){
         if(input == null)
             throw new NullPointerException("Null Input");
