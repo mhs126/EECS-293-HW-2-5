@@ -34,5 +34,9 @@ public class InternalNodeTest {
 
     @org.testng.annotations.Test
     public void testToString() {
+        nodeList.add(one);
+        nodeList.add(two);
+        InternalNode intNode = InternalNode.build(nodeList);
+        assertEquals("[x,y]", intNode.toString());
     }
 }

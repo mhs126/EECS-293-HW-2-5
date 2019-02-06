@@ -8,6 +8,8 @@ public final class InternalNode implements Node{
 
     private final List<Node> children;
 
+    private String listString;
+
     //a getter that returns a copy of the private children.
     private List<Node> getChildren(){
         return children;
@@ -38,14 +40,16 @@ public final class InternalNode implements Node{
 
     //return a string representation of children
     public String toString(){
-        String output = "";
-        for (Token token: this.toList())
-            output = output + "[" + token.toString()+ ",";
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int x = 0; x < children.size()-1; x++) {
+            builder.append(children.get(x).toString());
+            builder.append(",");
+        }
 
-        for (int i = 0; i < this.toList().size(); i++)
-            output = output + "]";
-
-        return output;
+        builder.append(children.get(children.size()-1).toString());
+        builder.append("]");
+        return builder.toString();
     }
 
     public static void main(String[] args){
