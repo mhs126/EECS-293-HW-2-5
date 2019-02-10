@@ -1,4 +1,5 @@
 package Parser;
+import java.util.Objects;
 import java.util.function.Function;
 public final class Variable extends AbstractToken{
 
@@ -6,7 +7,7 @@ public final class Variable extends AbstractToken{
 
     private static Cache<String, Variable> cache = new Cache<String, Variable>();
 
-    //Returns the tpye as variable
+    //Returns the type as variable
     public TerminalSymbol getType(){
         return TerminalSymbol.VARIABLE;
     }
@@ -18,23 +19,15 @@ public final class Variable extends AbstractToken{
 
     //Initializes the variable with its string representation
     private Variable(String rep){
-        if(rep == null) {
-            throw new NullPointerException("The parameter is null");
-        }
-        else{
+        Objects.requireNonNull(rep, "Input string is null, please enter a valid string");
             this.representation = rep;
         }
-    }
 
     //Builds the variable, throws a null pointer exception if the argument is null
     public static final Variable build(String rep){
-        if(rep == null){
-            throw new NullPointerException("Null input");
-        }
-        else{
+        Objects.requireNonNull(rep, "Input string is null, please enter a valid string");
             Function<String, Variable> f = (s) -> new Variable(s);
             return cache.get(rep, f);
-        }
     }
 
     //Returns representation

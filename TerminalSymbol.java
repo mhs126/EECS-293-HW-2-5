@@ -10,12 +10,13 @@ public enum TerminalSymbol implements Symbol{
     //parses the input list based on the current node
     //returns a successful ParseState if the first type in the list is equal to the current type
     public ParseState parse(List<Token> list){
-        if(list.get(0).getType() == this){
+        if(list.get(0).matches(this)){
             LeafNode leafNode = LeafNode.build(list.remove(0));
             return ParseState.build(leafNode, list);
         }
-        else
+        else {
             return ParseState.FAILURE;
+        }
     }
 
 }

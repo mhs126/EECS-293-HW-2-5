@@ -3,16 +3,15 @@ package Parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class InternalNode implements Node{
 
     private final List<Node> children;
 
-    private String listString;
-
     //a getter that returns a copy of the private children.
-    private List<Node> getChildren(){
-        return children;
+    public List<Node> getChildren(){
+        return new ArrayList<>(children);
     }
 
     private InternalNode (List<Node> children){
@@ -21,19 +20,15 @@ public final class InternalNode implements Node{
 
     //a build method returns a new internal node with the given children, or throws a NullPointerException if the argument is null.
     public final static InternalNode build(List<Node> children){
-        if(children == null)
-            throw new NullPointerException("The argument is null");
-
+        Objects.requireNonNull(children, "Null input, please enter valid list");
         return new InternalNode(children);
     }
 
     //return the concatenation of the children¡¯s lists
     public final List<Token> toList(){
-        //int i = 0;
         List<Token> output = new ArrayList<Token>();
         for (int i = 0; i < children.size(); i++){
             output.addAll(children.get(i).toList());
-            //i++;
         }
         return output;
     }
@@ -50,6 +45,32 @@ public final class InternalNode implements Node{
         builder.append(children.get(children.size()-1).toString());
         builder.append("]");
         return builder.toString();
+    }
+
+    public boolean isFruitful(){
+        return (!children.isEmpty());
+    }
+
+    public class Builder {
+        private List<Node> children;
+
+        public boolean addChild(Node node) {
+            return children.add(node);
+        }
+        /*
+        public Builder simplify(){
+            for(Node node: children){
+                if(!node.isFruitful()) {
+                    children.remove(node);
+                }
+        }
+    }
+    */
+
+       /* public InternalNode build(){
+            InternalNode<> (SymbolSequence :: match(InternalNode.this.toList()))
+        }
+    */
     }
 
     //Main method for testing

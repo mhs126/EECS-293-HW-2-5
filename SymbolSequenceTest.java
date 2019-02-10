@@ -24,7 +24,7 @@ public class SymbolSequenceTest {
 
     @Test
     public void testToString() {
-        assertEquals("[PLUS,MINUS,DIVIDE]", s.toString());
+        assertEquals("[PLUS, MINUS, DIVIDE]", s.toString());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class SymbolSequenceTest {
         list2.add(two);
         list2.add(three);
         InternalNode node = InternalNode.build(list2);
-        assertEquals(true, s.match(list).getSuccess());
+        assertEquals(true, s.match(list).isSuccess());
 
     }
 }

@@ -1,6 +1,8 @@
 package Parser;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 public final class LeafNode implements Node{
 
     private final Token token;
@@ -16,9 +18,7 @@ public final class LeafNode implements Node{
 
     //a build method that returns a new leaf with the given token,or throws a NullPointerException if the argument is null.
     public final static LeafNode build(Token token){
-        if(token == null)
-            throw new NullPointerException("The argument is null");
-
+        Objects.requireNonNull(token, "Input token is null, please input a valid token");
         return new LeafNode(token);
     }
 
@@ -33,10 +33,19 @@ public final class LeafNode implements Node{
         return output;
     }
 
+    //For testing
     public static void main(String[] args){
         Variable x = Variable.build("x");
         LeafNode l = LeafNode.build(x);
         System.out.println(l.toString());
+    }
+
+    public List<Node> getChildren(){
+        return null;
+    }
+
+    public boolean isFruitful(){
+        return true;
     }
 
 }

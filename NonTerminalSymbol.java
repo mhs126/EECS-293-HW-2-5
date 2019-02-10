@@ -2,61 +2,88 @@ package Parser;
 
 import java.util.*;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+
 enum NonTerminalSymbol implements Symbol {
 
     //Non-Terminal types
     EXPRESSION, EXPRESSION_TAIL, TERM, TERM_TAIL, UNARY, FACTOR;
 
-    Map<NonTerminalSymbol, List<SymbolSequence>> map = new HashMap<>();
+    static Map<NonTerminalSymbol, List<SymbolSequence>> nonTerminalSymbolsMap = new HashMap<>();
+
+    static {
+        //Creates the list for expression
+        List<SymbolSequence> expressionList = new ArrayList<>();
+        SymbolSequence expression1 = SymbolSequence.build(TERM, EXPRESSION_TAIL);
+        expressionList.add(expression1);
+        nonTerminalSymbolsMap.put(EXPRESSION, expressionList);
+
+        //Creates the list for expression_tail
+        List<SymbolSequence> expression_tailList = new ArrayList<>();
+        SymbolSequence expression_tail1 = SymbolSequence.build(TerminalSymbol.PLUS, TERM, EXPRESSION_TAIL);
+        SymbolSequence expression_tail2 = SymbolSequence.build(TerminalSymbol.MINUS, TERM, EXPRESSION_TAIL);
+        expression_tailList.add(expression_tail1);
+        expression_tailList.add(expression_tail2);
+        expression_tailList.add(SymbolSequence.EPSILON);
+        nonTerminalSymbolsMap.put(EXPRESSION_TAIL, expression_tailList);
+
+        //Creates the list for term
+        List<SymbolSequence> termList = new ArrayList<>();
+        SymbolSequence term1 = SymbolSequence.build(UNARY, TERM_TAIL);
+        termList.add(term1);
+        nonTerminalSymbolsMap.put(TERM, termList);
+
+        //Creates the list for term_list
+        List<SymbolSequence> term_tailList = new ArrayList<>();
+        SymbolSequence term_tail1 = SymbolSequence.build(TerminalSymbol.TIMES, UNARY, TERM_TAIL);
+        SymbolSequence term_tail2 = SymbolSequence.build(TerminalSymbol.DIVIDE, UNARY, TERM_TAIL);
+        term_tailList.add(term_tail1);
+        term_tailList.add(term_tail2);
+        term_tailList.add(SymbolSequence.EPSILON);
+        nonTerminalSymbolsMap.put(TERM_TAIL, term_tailList);
+
+        //creates the list for unary
+        List<SymbolSequence> unaryList = new ArrayList<>();
+        SymbolSequence unary1 = SymbolSequence.build(TerminalSymbol.MINUS, FACTOR);
+        SymbolSequence unary2 = SymbolSequence.build(FACTOR);
+        unaryList.add(unary1);
+        unaryList.add(unary2);
+        nonTerminalSymbolsMap.put(UNARY, unaryList);
+
+        //creates list for factor
+        List<SymbolSequence> factorList = new ArrayList<>();
+        SymbolSequence factor1 = SymbolSequence.build(TerminalSymbol.OPEN, EXPRESSION, TerminalSymbol.CLOSE);
+        SymbolSequence factor2 = SymbolSequence.build(TerminalSymbol.VARIABLE);
+        factorList.add(factor1);
+        factorList.add(factor2);
+        nonTerminalSymbolsMap.put(FACTOR, factorList);
+    }
 
     public ParseState parse(List<Token> list) {
-        if(list == null)
-            throw new NullPointerException("Null Input");
-        return ParseState.build(null, null);
+        Objects.requireNonNull(list, "Input list is null, please enter a valid list");
+        for (SymbolSequence symbolSequence : nonTerminalSymbolsMap.get(this)) {
+            ParseState p = symbolSequence.match(list);
+            if (p.isSuccess()) {
+                return p;
+            }
+            //else it is not successful
+
+        }
+        return ParseState.FAILURE;
     }
 
-    //makes a map of NonTerminals and a list of SymbolSequences
-    private final void createMap(){
-        SymbolSequence s1 = SymbolSequence.build(TERM, EXPRESSION_TAIL);
-        SymbolSequence s2 = SymbolSequence.build(TerminalSymbol.PLUS, TERM, EXPRESSION_TAIL);
-        SymbolSequence s3 = SymbolSequence.build(TerminalSymbol.MINUS, TERM, EXPRESSION_TAIL);
-        SymbolSequence s4 =SymbolSequence.EPSILON;
-        SymbolSequence s5 = SymbolSequence.build(UNARY, TERM_TAIL);
-        SymbolSequence s6 = SymbolSequence.build(TerminalSymbol.TIMES, UNARY, TERM_TAIL);
-        SymbolSequence s7 = SymbolSequence.build(TerminalSymbol.DIVIDE, UNARY, TERM_TAIL);
-        SymbolSequence s8 = SymbolSequence.build(TerminalSymbol.MINUS, FACTOR);
-        SymbolSequence s9 = SymbolSequence.build(FACTOR);
-        SymbolSequence s10 = SymbolSequence.build(TerminalSymbol.VARIABLE);
-        SymbolSequence s11 = SymbolSequence.build(EXPRESSION);
+    static final Optional<Node> parseInput (List<Token> input){
+        Objects.requireNonNull(input, "Input list is null, please enter a valid list");
+        Optional<Node> optionalNode = new Optional<>();
+        ParseState p = EXPRESSION.parse(input);
+        if(p.isSuccess() && p.hasNoRemainder()) {
+            return optionalNode.of(p.getNode());
+        }
+        else {
+            return optionalNode.empty();
+        }
 
-        List<SymbolSequence> l1 = new ArrayList<>();
-        List<SymbolSequence> l2 = new ArrayList<>();
-        List<SymbolSequence> l3 = new ArrayList<>();
-        List<SymbolSequence> l4 = new ArrayList<>();
-        List<SymbolSequence> l5 = new ArrayList<>();
-        List<SymbolSequence> l6 = new ArrayList<>();
-
-        l1.add(s1);
-        l2.add(s2);
-        l2.add(s3);
-        l2.add(s4);
-        l3.add(s5);
-        l4.add(s6);
-        l4.add(s7);
-        l4.add(s4);
-        l5.add(s8);
-        l5.add(s9);
-        l6.add(s10);
-        l6.add(s11);
-
-        map.put(EXPRESSION, l1);
-        map.put(EXPRESSION_TAIL, l2);
-        map.put(TERM,l3);
-        map.put(TERM_TAIL, l4);
-        map.put(UNARY, l5);
-        map.put(FACTOR, l6);
     }
-
-
-
 }
+

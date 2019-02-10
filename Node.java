@@ -4,4 +4,8 @@ interface Node{
 
     List<Token> toList();
 
+    List<Node> getChildren();
+
+    boolean isFruitful();
+
 }

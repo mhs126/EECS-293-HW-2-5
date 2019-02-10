@@ -2,6 +2,7 @@ package Parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class ParseState {
 
@@ -20,7 +21,7 @@ public final class ParseState {
         this.remainder = remainder;
     }
 
-    public final boolean getSuccess(){
+    public final boolean isSuccess(){
         return success;
     }
 
@@ -29,23 +30,19 @@ public final class ParseState {
     }
 
     public final List<Token> getRemainder(){
-        return remainder;
+        return new ArrayList<>(remainder);
     }
 
     //Returns true if remainder is null
     public final boolean hasNoRemainder(){
-        if(remainder == null)
-            return true;
-        else
-            return false;
+        return (remainder == null);
     }
 
     //build method for ParseState, throws a null pointer if any null input
     public final static ParseState build(Node node, List<Token> remainder){
-        if(node == null || remainder == null)
-            throw new NullPointerException("Null Argument Given");
-        else
-            return new ParseState(true, node, remainder);
+        Objects.requireNonNull(node, "Input node is null, please enter a valid node");
+        Objects.requireNonNull(remainder, "Input list is null, please enter a valid list");
+        return new ParseState(true, node, remainder);
     }
 
 }
