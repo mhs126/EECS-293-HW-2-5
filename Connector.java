@@ -28,15 +28,14 @@ public final class Connector extends AbstractToken{
 
     //Private Constructor that sets the type
     private Connector(TerminalSymbol t){
-        Objects.requireNonNull(t, "Null TerminalSymbol input, please enter valid TerminalSymbol");
-        type = t;
+        type = Objects.requireNonNull(t, "Null TerminalSymbol input, please enter valid TerminalSymbol");
     }
 
     //Change to throw a null pointer
     public static final Connector build(TerminalSymbol t){
-        Objects.requireNonNull(t, "Null TerminalSymbol input, please enter valid TerminalSymbol");
         Function<TerminalSymbol, Connector> f = (s) -> new Connector(s);
-        return cache.get(t, f);
+        return cache.get(Objects.requireNonNull(t,
+                "Null TerminalSymbol input, please enter valid TerminalSymbol"), f);
     }
 
     //Returns type
@@ -46,12 +45,7 @@ public final class Connector extends AbstractToken{
 
     //Returns the type as a string value
     public String toString(){
-        if(map.get(type) != null) {
-            return map.get(type);
-        }
-        else {
-            throw new NullPointerException("Key points to null, please input valid key");
-        }
+        return Objects.requireNonNull(map.get(type), "Key points to null, please input valid key");
     }
 
 }

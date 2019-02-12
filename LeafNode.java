@@ -18,8 +18,8 @@ public final class LeafNode implements Node{
 
     //a build method that returns a new leaf with the given token,or throws a NullPointerException if the argument is null.
     public final static LeafNode build(Token token){
-        Objects.requireNonNull(token, "Input token is null, please input a valid token");
-        return new LeafNode(token);
+        return new LeafNode(Objects.requireNonNull(token,
+                "Input token is null, please input a valid token"));
     }
 
     public String toString(){

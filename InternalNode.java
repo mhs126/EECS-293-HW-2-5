@@ -1,6 +1,8 @@
 //Make lists immutable (use collections)?
 package Parser;
 
+import sun.util.BuddhistCalendar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +22,8 @@ public final class InternalNode implements Node{
 
     //a build method returns a new internal node with the given children, or throws a NullPointerException if the argument is null.
     public final static InternalNode build(List<Node> children){
-        Objects.requireNonNull(children, "Null input, please enter valid list");
-        return new InternalNode(children);
+        return new InternalNode(Objects.requireNonNull(children,
+                "Null input, please enter valid list"));
     }
 
     //return the concatenation of the children¡¯s lists
@@ -57,20 +59,51 @@ public final class InternalNode implements Node{
         public boolean addChild(Node node) {
             return children.add(node);
         }
-        /*
-        public Builder simplify(){
-            for(Node node: children){
-                if(!node.isFruitful()) {
-                    children.remove(node);
-                }
-        }
-    }
-    */
 
-       /* public InternalNode build(){
-            InternalNode<> (SymbolSequence :: match(InternalNode.this.toList()))
+        public Builder simplify(){
+            List<Node> simplifiedList = this.removeChildlessNodes();
+            Builder builder = new Builder();
+            if(simplifiedList.size() == 1 && simplifiedList.get(0).getChildren() != null){
+                builder.setChildren(simplifiedList.get(0).getChildren());
+            }
+            else{
+                builder.setChildren(simplifiedList);
+            }
+            return builder;
         }
-    */
+
+
+
+        /*
+        Helper method for simplify
+        Removes all nodes from children that have no children
+        Makes a copy of the list
+         */
+        private List<Node> removeChildlessNodes() {
+            List<Node> returnList = new ArrayList<>(children);
+            for (Node node : returnList) {
+                if (!node.isFruitful()) {
+                    returnList.remove(node);
+                }
+                //else we keep the node
+            }
+            return returnList;
+        }
+
+        /*
+            Setter method for children
+            Helper method for simplify
+        */
+        private void setChildren(List<Node> list){
+            this.children = list;
+        }
+
+       /*public InternalNode build(){
+            InternalNode (SymbolSequence :: match);
+        }*/
+
+
+
     }
 
     //Main method for testing

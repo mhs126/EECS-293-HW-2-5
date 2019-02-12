@@ -40,9 +40,9 @@ public final class ParseState {
 
     //build method for ParseState, throws a null pointer if any null input
     public final static ParseState build(Node node, List<Token> remainder){
-        Objects.requireNonNull(node, "Input node is null, please enter a valid node");
-        Objects.requireNonNull(remainder, "Input list is null, please enter a valid list");
-        return new ParseState(true, node, remainder);
+        return new ParseState(true,
+                Objects.requireNonNull(node, "Input node is null, please enter a valid node"),
+                Objects.requireNonNull(remainder, "Input list is null, please enter a valid list"));
     }
 
 }

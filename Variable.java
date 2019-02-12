@@ -19,15 +19,15 @@ public final class Variable extends AbstractToken{
 
     //Initializes the variable with its string representation
     private Variable(String rep){
-        Objects.requireNonNull(rep, "Input string is null, please enter a valid string");
-            this.representation = rep;
+        this.representation = Objects.requireNonNull(rep,
+                "Input string is null, please enter a valid string");
         }
 
     //Builds the variable, throws a null pointer exception if the argument is null
     public static final Variable build(String rep){
-        Objects.requireNonNull(rep, "Input string is null, please enter a valid string");
             Function<String, Variable> f = (s) -> new Variable(s);
-            return cache.get(rep, f);
+            return cache.get(Objects.requireNonNull(rep,
+                    "Input string is null, please enter a valid string"), f);
     }
 
     //Returns representation

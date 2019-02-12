@@ -61,9 +61,9 @@ enum NonTerminalSymbol implements Symbol {
     }
 
     public ParseState parse(List<Token> list) {
-        Objects.requireNonNull(list, "Input list is null, please enter a valid list");
         for (SymbolSequence symbolSequence : nonTerminalSymbolsMap.get(this)) {
-            ParseState p = symbolSequence.match(list);
+            ParseState p = symbolSequence.match(Objects.requireNonNull(list,
+                    "Input list is null, please enter a valid list"));
             if (p.isSuccess()) {
                 return p;
             }
@@ -74,9 +74,9 @@ enum NonTerminalSymbol implements Symbol {
     }
 
     static final Optional<Node> parseInput (List<Token> input){
-        Objects.requireNonNull(input, "Input list is null, please enter a valid list");
         Optional<Node> optionalNode = new Optional<>();
-        ParseState p = EXPRESSION.parse(input);
+        ParseState p = EXPRESSION.parse(Objects.requireNonNull(input,
+                "Input list is null, please enter a valid list"));
         if(p.isSuccess() && p.hasNoRemainder()) {
             return optionalNode.of(p.getNode());
         }

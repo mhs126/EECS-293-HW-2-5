@@ -18,14 +18,14 @@ final class SymbolSequence {
 
     //Build method for SymbolSequence
     public  final static SymbolSequence build(List<Symbol> production){
-        Objects.requireNonNull(production, "Input list is null, please enter a valid list");
-        return new SymbolSequence(production);
+        return new SymbolSequence(Objects.requireNonNull(production,
+                "Input list is null, please enter a valid list"));
     }
 
     //Alternative build method, takes a variable number of args
     public final static SymbolSequence build(Symbol... symbols){
-        Objects.requireNonNull(symbols, "Input is null, please enter valid symbol(s)");
-        return new SymbolSequence(Arrays.asList(symbols));
+        return new SymbolSequence(Arrays.asList(Objects.requireNonNull(symbols,
+                "Input is null, please enter valid symbol(s)")));
     }
 
     //Makes the production a string
@@ -35,8 +35,8 @@ final class SymbolSequence {
 
     //Returns a successful ParseState if the parse of the remainder if succesful for all  of production
     public ParseState match(List<Token> input){
-        Objects.requireNonNull(input, "Input list is null, please enter a valid list");
-        List<Token> remainder = input;
+        List<Token> remainder = Objects.requireNonNull(input,
+                "Input list is null, please enter a valid list");;
         List<Node> children = new ArrayList<>();
         for (Symbol symbol : production) {
             ParseState p = symbol.parse(remainder);
