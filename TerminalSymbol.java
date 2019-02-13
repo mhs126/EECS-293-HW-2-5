@@ -1,5 +1,6 @@
 package Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum TerminalSymbol implements Symbol{
@@ -16,6 +17,21 @@ public enum TerminalSymbol implements Symbol{
         else {
             return ParseState.FAILURE;
         }
+    }
+
+    public static void main(String[] args){
+        Variable a = Variable.build("a");
+        Variable b = Variable.build("b");
+        Variable c = Variable.build("c");
+        Connector plus = Connector.build(TerminalSymbol.PLUS);
+        Connector divide = Connector.build(TerminalSymbol.DIVIDE);
+        List<Token> list = new ArrayList<>();
+        list.add(a);
+        list.add(plus);
+        list.add(b);
+        list.add(divide);
+        list.add(c);
+        System.out.println(TerminalSymbol.VARIABLE.parse(list).toString());
     }
 
 }

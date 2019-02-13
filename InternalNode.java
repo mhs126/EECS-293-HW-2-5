@@ -58,10 +58,11 @@ public final class InternalNode implements Node{
     }
 
     public static class Builder {
-        private List<Node> children;
+        private List<Node> children = new ArrayList<>();
 
         public boolean addChild(Node node) {
-            return children.add(node);
+            return Objects.requireNonNull(this.children.add(node),
+                    "Null node input, please enter a valid node");
         }
 
         public Builder simplify(){
@@ -76,7 +77,6 @@ public final class InternalNode implements Node{
 
 
        public InternalNode build(){
-            this.simplify();
             return new InternalNode(children);
         }
 

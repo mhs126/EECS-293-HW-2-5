@@ -48,7 +48,25 @@ final class SymbolSequence {
                 remainder = p.getRemainder();
             }
         }
-        return ParseState.build(builder.build(), remainder);
+        return ParseState.build(builder.simplify().build(), remainder);
+    }
+
+    //For testing SymbolSequence (Getting Errors)
+    public static void main(String[] args){
+        Variable a = Variable.build("a");
+        Variable b = Variable.build("b");
+        Variable c = Variable.build("c");
+        Connector plus = Connector.build(TerminalSymbol.PLUS);
+        Connector divide = Connector.build(TerminalSymbol.DIVIDE);
+        List<Token> list = new ArrayList<>();
+        list.add(a);
+        list.add(plus);
+        list.add(b);
+        list.add(divide);
+        list.add(c);
+        SymbolSequence s = SymbolSequence.build(TerminalSymbol.VARIABLE, TerminalSymbol.PLUS, TerminalSymbol.VARIABLE,
+                TerminalSymbol.DIVIDE, TerminalSymbol.VARIABLE);
+        System.out.println(s.match(list).getRemainder().toString());
     }
 
 

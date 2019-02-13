@@ -68,6 +68,7 @@ enum NonTerminalSymbol implements Symbol {
         SymbolSequence term_tail2 = SymbolSequence.build(TerminalSymbol.DIVIDE, UNARY, TERM_TAIL);
         term_tailMap.put(TerminalSymbol.TIMES, term_tail1);
         term_tailMap.put(TerminalSymbol.DIVIDE, term_tail2);
+        term_tailMap.put(null, SymbolSequence.EPSILON);
         nonTerminalSymbolsMap.put(TERM_TAIL, term_tailMap);
 
         /*
@@ -100,6 +101,7 @@ enum NonTerminalSymbol implements Symbol {
      */
     public ParseState parse(List<Token> list) {
         SymbolSequence parseSequence = nonTerminalSymbolsMap.get(this).get(list.get(0).getType());
+        System.out.println("We good");
         ParseState p = parseSequence.match(Objects.requireNonNull(list,
                 "Input list is null, please enter a valid list"));
         if (p.isSuccess()) {
@@ -108,7 +110,7 @@ enum NonTerminalSymbol implements Symbol {
         }
         return ParseState.FAILURE;
     }
-
+    /*Not working, don't know why we have this error
     static final Optional<Node> parseInput (List<Token> input){
         Optional<Node> optionalNode = new Optional<Node>();
         ParseState p = EXPRESSION.parse(Objects.requireNonNull(input,
@@ -120,6 +122,22 @@ enum NonTerminalSymbol implements Symbol {
             return optionalNode.empty();
         }
 
+    }*/
+
+    public static void main(String[] args){
+        Variable a = Variable.build("a");
+        Variable b = Variable.build("b");
+        Variable c = Variable.build("c");
+        Connector plus = Connector.build(TerminalSymbol.PLUS);
+        Connector divide = Connector.build(TerminalSymbol.DIVIDE);
+        List<Token> list = new ArrayList<>();
+        list.add(a);
+        list.add(plus);
+        list.add(b);
+        list.add(divide);
+        list.add(c);
+        //System.out.println( EXPRESSION.parse(list).toString());
+        System.out.println(nonTerminalSymbolsMap.get(EXPRESSION).get(TerminalSymbol.PLUS).toString());
     }
 
 }
