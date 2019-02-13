@@ -45,7 +45,7 @@ public final class Connector extends AbstractToken{
 
     //Returns the type as a string value
     public String toString(){
-        return Objects.requireNonNull(map.get(type), "Key points to null, please input valid key");
+        return map.get(type);
     }
 
 }

@@ -36,20 +36,19 @@ final class SymbolSequence {
     //Returns a successful ParseState if the parse of the remainder if succesful for all  of production
     public ParseState match(List<Token> input){
         List<Token> remainder = Objects.requireNonNull(input,
-                "Input list is null, please enter a valid list");;
-        List<Node> children = new ArrayList<>();
+                "Input list is null, please enter a valid list");
+        InternalNode.Builder builder = new InternalNode.Builder();
         for (Symbol symbol : production) {
             ParseState p = symbol.parse(remainder);
             if (!p.isSuccess()) {
                 return ParseState.FAILURE;
             }
             else {
-                children.add(p.getNode());
+                builder.addChild(p.getNode());
                 remainder = p.getRemainder();
             }
         }
-        InternalNode intNode = InternalNode.build(children);
-        return ParseState.build(intNode, remainder);
+        return ParseState.build(builder.build(), remainder);
     }
 
 

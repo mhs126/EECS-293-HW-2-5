@@ -1,9 +1,11 @@
 //Make lists immutable (use collections)?
 package Parser;
 
+import com.sun.javafx.UnmodifiableArrayList;
 import sun.util.BuddhistCalendar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,13 +13,15 @@ public final class InternalNode implements Node{
 
     private final List<Node> children;
 
+    private Cache<InternalNode, String> cache;
+
     //a getter that returns a copy of the private children.
     public List<Node> getChildren(){
         return new ArrayList<>(children);
     }
 
     private InternalNode (List<Node> children){
-        this.children = new ArrayList<>(children);
+        this.children = Collections.unmodifiableList(children);
     }
 
     //a build method returns a new internal node with the given children, or throws a NullPointerException if the argument is null.
@@ -53,7 +57,7 @@ public final class InternalNode implements Node{
         return (!children.isEmpty());
     }
 
-    public class Builder {
+    public static class Builder {
         private List<Node> children;
 
         public boolean addChild(Node node) {
@@ -61,46 +65,20 @@ public final class InternalNode implements Node{
         }
 
         public Builder simplify(){
-            List<Node> simplifiedList = this.removeChildlessNodes();
-            Builder builder = new Builder();
-            if(simplifiedList.size() == 1 && simplifiedList.get(0).getChildren() != null){
-                builder.setChildren(simplifiedList.get(0).getChildren());
+            this.children.removeIf(node -> !node.isFruitful());
+            if(this.children.size() == 1 && this.children.get(0).getChildren() != null){
+                List<Node> childList = new ArrayList<>(children.remove(0).getChildren());
+                this.children.addAll(childList);
             }
-            else{
-                builder.setChildren(simplifiedList);
-            }
-            return builder;
+            //Else we just return our current builder without adjusting the list
+            return this;
         }
 
 
-
-        /*
-        Helper method for simplify
-        Removes all nodes from children that have no children
-        Makes a copy of the list
-         */
-        private List<Node> removeChildlessNodes() {
-            List<Node> returnList = new ArrayList<>(children);
-            for (Node node : returnList) {
-                if (!node.isFruitful()) {
-                    returnList.remove(node);
-                }
-                //else we keep the node
-            }
-            return returnList;
+       public InternalNode build(){
+            this.simplify();
+            return new InternalNode(children);
         }
-
-        /*
-            Setter method for children
-            Helper method for simplify
-        */
-        private void setChildren(List<Node> list){
-            this.children = list;
-        }
-
-       /*public InternalNode build(){
-            InternalNode (SymbolSequence :: match);
-        }*/
 
 
 
