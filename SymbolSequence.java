@@ -51,7 +51,7 @@ final class SymbolSequence {
         return ParseState.build(builder.simplify().build(), remainder);
     }
 
-    //For testing SymbolSequence (Getting Errors)
+    //For testing SymbolSequence
     public static void main(String[] args){
         Variable a = Variable.build("a");
         Variable b = Variable.build("b");

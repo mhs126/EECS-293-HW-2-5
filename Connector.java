@@ -48,5 +48,10 @@ public final class Connector extends AbstractToken{
         return map.get(type);
     }
 
+    //Returns true if the current instance is an operator
+    public boolean isOperator(){
+        return (!(this.matches(TerminalSymbol.OPEN) || this.matches(TerminalSymbol.CLOSE)));
+    }
+
 }
 

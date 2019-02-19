@@ -2,6 +2,7 @@ package Parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class LeafNode implements Node{
 
@@ -48,4 +49,17 @@ public final class LeafNode implements Node{
         return true;
     }
 
+    public boolean isOperator(){
+        return this.getToken().isOperator();
+    }
+
+    public boolean isStartedByOperator(){return false;}
+
+    public Optional<Node> firstChild(){
+        return Optional.empty();
+    }
+
+    public boolean isSingleLeafParent() {
+        return false;
+    }
 }

@@ -30,6 +30,10 @@ public final class Variable extends AbstractToken{
                     "Input string is null, please enter a valid string"), f);
     }
 
+    public boolean isOperator(){
+        return false;
+    }
+
     //Returns representation
     public String toString(){
         return representation;

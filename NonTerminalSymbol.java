@@ -46,6 +46,7 @@ enum NonTerminalSymbol implements Symbol {
         SymbolSequence expression_tail2 = SymbolSequence.build(TerminalSymbol.MINUS, TERM, EXPRESSION_TAIL);
         expression_tailMap.put(TerminalSymbol.PLUS, expression_tail1);
         expression_tailMap.put(TerminalSymbol.MINUS, expression_tail2);
+        expression_tailMap.put(TerminalSymbol.CLOSE, SymbolSequence.EPSILON);
         expression_tailMap.put(null, SymbolSequence.EPSILON);
         nonTerminalSymbolsMap.put(EXPRESSION_TAIL, expression_tailMap);
 
@@ -56,6 +57,7 @@ enum NonTerminalSymbol implements Symbol {
          */
         SymbolSequence term1 = SymbolSequence.build(UNARY, TERM_TAIL);
         termMap.put(TerminalSymbol.MINUS, term1);
+        termMap.put(TerminalSymbol.OPEN, term1);
         termMap.put(TerminalSymbol.VARIABLE, term1);
         nonTerminalSymbolsMap.put(TERM, termMap);
 
@@ -68,6 +70,9 @@ enum NonTerminalSymbol implements Symbol {
         SymbolSequence term_tail2 = SymbolSequence.build(TerminalSymbol.DIVIDE, UNARY, TERM_TAIL);
         term_tailMap.put(TerminalSymbol.TIMES, term_tail1);
         term_tailMap.put(TerminalSymbol.DIVIDE, term_tail2);
+        term_tailMap.put(TerminalSymbol.CLOSE, SymbolSequence.EPSILON);
+        term_tailMap.put(TerminalSymbol.MINUS, SymbolSequence.EPSILON);
+        term_tailMap.put(TerminalSymbol.PLUS, SymbolSequence.EPSILON);
         term_tailMap.put(null, SymbolSequence.EPSILON);
         nonTerminalSymbolsMap.put(TERM_TAIL, term_tailMap);
 
@@ -79,6 +84,7 @@ enum NonTerminalSymbol implements Symbol {
         SymbolSequence unary1 = SymbolSequence.build(TerminalSymbol.MINUS, FACTOR);
         SymbolSequence unary2 = SymbolSequence.build(FACTOR);
         unaryMap.put(TerminalSymbol.MINUS, unary1);
+        unaryMap.put(TerminalSymbol.OPEN, unary2);
         unaryMap.put(TerminalSymbol.VARIABLE, unary2);
         nonTerminalSymbolsMap.put(UNARY, unaryMap);
 
@@ -100,29 +106,35 @@ enum NonTerminalSymbol implements Symbol {
     Returns a failed ParseState if it does not match
      */
     public ParseState parse(List<Token> list) {
-        SymbolSequence parseSequence = nonTerminalSymbolsMap.get(this).get(list.get(0).getType());
-        System.out.println("We good");
-        ParseState p = parseSequence.match(Objects.requireNonNull(list,
-                "Input list is null, please enter a valid list"));
-        if (p.isSuccess()) {
-            return p;
-
+        //Check for empty list and use a null key
+        if(list.isEmpty()){
+            return nonTerminalSymbolsMap.get(this).get(null).match(list);
         }
-        return ParseState.FAILURE;
+        else {
+            SymbolSequence parseSequence = nonTerminalSymbolsMap.get(this).get(list.get(0).getType());
+            ParseState p = parseSequence.match(Objects.requireNonNull(list,
+                    "Input list is null, please enter a valid list"));
+            //return the match
+            if (p.isSuccess()) {
+                return p;
+
+            }
+            return ParseState.FAILURE;
+        }
     }
-    /*Not working, don't know why we have this error
+
+    //Call optional.empty and of
     static final Optional<Node> parseInput (List<Token> input){
-        Optional<Node> optionalNode = new Optional<Node>();
         ParseState p = EXPRESSION.parse(Objects.requireNonNull(input,
                 "Input list is null, please enter a valid list"));
         if(p.isSuccess() && p.hasNoRemainder()) {
-            return optionalNode.of(p.getNode());
+            return Optional.of(p.getNode());
         }
         else {
-            return optionalNode.empty();
+            return Optional.empty();
         }
 
-    }*/
+    }
 
     public static void main(String[] args){
         Variable a = Variable.build("a");
@@ -136,8 +148,8 @@ enum NonTerminalSymbol implements Symbol {
         list.add(b);
         list.add(divide);
         list.add(c);
-        //System.out.println( EXPRESSION.parse(list).toString());
-        System.out.println(nonTerminalSymbolsMap.get(EXPRESSION).get(TerminalSymbol.PLUS).toString());
+        System.out.println( EXPRESSION.parse(list).toString());
+        System.out.println(nonTerminalSymbolsMap.get(EXPRESSION).get(TerminalSymbol.VARIABLE).toString());
     }
 
 }
