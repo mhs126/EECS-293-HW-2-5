@@ -7,25 +7,27 @@ enum NonTerminalSymbol implements Symbol {
     //Non-Terminal types
     EXPRESSION, EXPRESSION_TAIL, TERM, TERM_TAIL, UNARY, FACTOR;
 
-    /*
-    Creates the map with NonTerminalSymbol key and map value
-    Creates six maps, one for each NonTerminal with a TerminalSymbol key and SymbolSequence value
-     */
+    //Creates the map with NonTerminalSymbol key and map value
     private static Map<NonTerminalSymbol, Map<TerminalSymbol, SymbolSequence>> nonTerminalSymbolsMap = new HashMap<>();
 
-    private static Map<TerminalSymbol, SymbolSequence> expressionMap = new HashMap<>();
-
-    private static Map<TerminalSymbol, SymbolSequence> expression_tailMap = new HashMap<>();
-
-    private static Map<TerminalSymbol, SymbolSequence> termMap = new HashMap<>();
-
-    private static Map<TerminalSymbol, SymbolSequence> term_tailMap = new HashMap<>();
-
-    private static Map<TerminalSymbol, SymbolSequence> unaryMap = new HashMap<>();
-
-    private static Map<TerminalSymbol, SymbolSequence> factorMap = new HashMap<>();
 
     static {
+            /*
+    Creates six maps, one for each NonTerminal with a TerminalSymbol key and SymbolSequence value
+     */
+
+        Map<TerminalSymbol, SymbolSequence> expressionMap = new HashMap<>();
+
+        Map<TerminalSymbol, SymbolSequence> expression_tailMap = new HashMap<>();
+
+        Map<TerminalSymbol, SymbolSequence> termMap = new HashMap<>();
+
+        Map<TerminalSymbol, SymbolSequence> term_tailMap = new HashMap<>();
+
+        Map<TerminalSymbol, SymbolSequence> unaryMap = new HashMap<>();
+
+        Map<TerminalSymbol, SymbolSequence> factorMap = new HashMap<>();
+
         /*
         Creates the SymbolSequence for the expression map
         Adds the appropriate TerminalSymbols and expression to the expression map
@@ -106,14 +108,14 @@ enum NonTerminalSymbol implements Symbol {
     Returns a failed ParseState if it does not match
      */
     public ParseState parse(List<Token> list) {
+        Objects.requireNonNull(list, "Input is null, please enter a valid list");
         //Check for empty list and use a null key
         if(list.isEmpty()){
             return nonTerminalSymbolsMap.get(this).get(null).match(list);
         }
         else {
             SymbolSequence parseSequence = nonTerminalSymbolsMap.get(this).get(list.get(0).getType());
-            ParseState p = parseSequence.match(Objects.requireNonNull(list,
-                    "Input list is null, please enter a valid list"));
+            ParseState p = parseSequence.match(list);
             //return the match
             if (p.isSuccess()) {
                 return p;
@@ -148,7 +150,7 @@ enum NonTerminalSymbol implements Symbol {
         list.add(b);
         list.add(divide);
         list.add(c);
-        System.out.println( EXPRESSION.parse(list).toString());
+        System.out.println( EXPRESSION.parse(list).getRemainder().toString());
         System.out.println(nonTerminalSymbolsMap.get(EXPRESSION).get(TerminalSymbol.VARIABLE).toString());
     }
 
