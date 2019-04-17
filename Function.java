@@ -12,9 +12,10 @@ public class Function extends Type {
     this.lowerSet = lower;
     this.compatable = new HashSet<Type>(lower);
     this.compatable.addAll(higher);
-    Set<Connector> tempSet = new HashSet<>();
-    tempSet.addAll(Stream.of(TerminalSymbol.PLUS, TerminalSymbol.TIMES).collect.Collectors.toSet()));
-    this.validConnectors = tempSet;
+    this.validConnectors = new HashSet<Type>().addAll(Stream.of(TerminalSymbol.PLUS, TerminalSymbol.TIMES).collect.Collectors.toSet()));
+    //Set<Connector> tempSet = new HashSet<>();
+    //tempSet.addAll(Stream.of(TerminalSymbol.PLUS, TerminalSymbol.TIMES).collect.Collectors.toSet()));
+    //this.validConnectors = tempSet;
   }
   
   @override
