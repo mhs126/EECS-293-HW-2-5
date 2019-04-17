@@ -6,13 +6,8 @@ public class Function extends Type {
   public Set<Type> compatible;
   public Set<TerminalSymbol> validConnectors;
   
-  private Type(String name, Set<Type> higher, Set<Type> lower){
+  private Type(String name){
     this.name = name;
-    this.higherSet = higher;
-    this.lowerSet = lower;
-    this.lowerSet.add(this)
-    this.compatable = new HashSet<Type>(lower);
-    this.compatable.addAll(higher);
     this.validConnectors = new HashSet<Type>().addAll(
                                               Stream.of(TerminalSymbol.PLUS, TerminalSymbol.TIMES)
                                               .collect
@@ -38,8 +33,8 @@ public class Function extends Type {
   }
   
   //Public build method for Function
-  public Function Build(String name, Set<Type> higher, Set<Type> lower){
-    return new Type(name, higher, lower); 
+  public static Function Build(String name){
+    return new Function(name); 
   }
   
   /*
