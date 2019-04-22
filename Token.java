@@ -1,4 +1,3 @@
-package Parser;
 interface Token{
 
     TerminalSymbol getType();

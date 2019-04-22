@@ -1,6 +1,5 @@
 //Make hash map instead of large switch statements
 //Change constructor input to a TerminalSymbol
-package Parser;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,9 +32,11 @@ public final class Connector extends AbstractToken{
 
     //Change to throw a null pointer
     public static final Connector build(TerminalSymbol t){
-        Function<TerminalSymbol, Connector> f = (s) -> new Connector(s);
-        return cache.get(Objects.requireNonNull(t,
-                "Null TerminalSymbol input, please enter valid TerminalSymbol"), f);
+        Objects.requireNonNull(t, "Connector build type is null");
+        if (!map.containsKey(t)) {
+            throw new IllegalArgumentException("Illegal Connector build argument");
+        }
+        return cache.get(t, Connector::new);
     }
 
     //Returns type

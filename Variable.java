@@ -1,4 +1,3 @@
-package Parser;
 import java.util.Objects;
 import java.util.function.Function;
 public final class Variable extends AbstractToken{
@@ -25,9 +24,8 @@ public final class Variable extends AbstractToken{
 
     //Builds the variable, throws a null pointer exception if the argument is null
     public static final Variable build(String rep){
-            Function<String, Variable> f = (s) -> new Variable(s);
-            return cache.get(Objects.requireNonNull(rep,
-                    "Input string is null, please enter a valid string"), f);
+        Objects.requireNonNull(rep, "Input string is null, please enter a valid string");
+        return cache.get(rep, Variable::new);
     }
 
     public boolean isOperator(){

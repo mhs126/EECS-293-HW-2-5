@@ -1,5 +1,3 @@
-package Parser;
-
 import java.util.*;
 
 enum NonTerminalSymbol implements Symbol {
@@ -150,9 +148,7 @@ enum NonTerminalSymbol implements Symbol {
         list.add(b);
         list.add(divide);
         list.add(c);
-        System.out.println( EXPRESSION.parse(list).getRemainder().toString());
-        System.out.println(nonTerminalSymbolsMap.get(EXPRESSION).get(TerminalSymbol.VARIABLE).toString());
+        System.out.println(EXPRESSION.parse(list).getRemainder().toString());
     }
-
 }
 

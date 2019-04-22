@@ -1,5 +1,3 @@
-package Parser;
-
 import java.util.List;
 
 interface Symbol {
