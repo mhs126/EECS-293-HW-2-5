@@ -28,15 +28,15 @@ public class TypeTest {
     @org.junit.Test
     public void addToHigher() {
         integer.addToHigher(dub);
-        assertEquals(integerSet, integer.higherSet);
-        assertEquals(integerSet, integer.compatible);
+        assertEquals(integerSet, integer.getHigherSet());
+        assertEquals(integerSet, integer.getCompatible());
     }
 
     @org.junit.Test
     public void addToLower() {
         integer.addToLower(dub);
-        assertEquals(integerSet, integer.lowerSet);
-        assertEquals(integerSet, integer.compatible);
+        assertEquals(integerSet, integer.getLowerSet());
+        assertEquals(integerSet, integer.getCompatible());
     }
 
     @org.junit.Test

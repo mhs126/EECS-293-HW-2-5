@@ -49,11 +49,6 @@ public class InternalNodeTest {
         assertNull(intNode.getCurrentType());
     }
 
-    @Test
-    public void setCurrentType() {
-        intNode.setCurrentType(t);
-        assertEquals(t, intNode.getCurrentType());
-    }
 
     @Test
     public void evaluateTypes() {

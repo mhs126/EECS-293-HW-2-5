@@ -1,75 +1,80 @@
+import com.sun.org.apache.bcel.internal.classfile.LocalVariableTable;
+
 import java.util.*;
 
 public class Driver {
-    
 
-    public static void main(String[] args) {
-            //make an internal node
-            Variable f = Variable.build("f");
-            Variable g = Variable.build("g");
-            Variable x = Variable.build("x");
-            Variable y = Variable.build("y");
-            Connector plus = Connector.build(TerminalSymbol.PLUS);
-            Connector times = Connector.build(TerminalSymbol.TIMES);
+    private static InternalNode internalNode;
+    private static HashMap<Variable, Type> variableType = new HashMap<>();
 
-            LeafNode leaf1 = LeafNode.build(f);
-            LeafNode leaf2 = LeafNode.build(times);
-            LeafNode leaf3 = LeafNode.build(g);
-            LeafNode leaf4 = LeafNode.build(plus);
-            LeafNode leaf5 = LeafNode.build(x);
-            LeafNode leaf6 = LeafNode.build(plus);
-            LeafNode leaf7 = LeafNode.build(y);
+    public static void setInternalNode(InternalNode inputNode) {
+        internalNode = inputNode;
+    }
 
-            List<Node> list = new ArrayList<>();
-            list.add(leaf1);
-            list.add(leaf2);
-            list.add(leaf3);
-            list.add(leaf4);
-            list.add(leaf5);
-            list.add(leaf6);
-            list.add(leaf7);
-            testNode = InternalNode.build(list);
-            InternalNode internalNode = testNode;
-            if (NonTerminalSymbol.EXPRESSION.parse(internalNode.toList()) == ParseState.FAILURE) {
-                //die
-                System.out.println("Invalid Expression");
-                return;
-            }
+    static {
+        //make an internal node
+        Variable f = Variable.build("f");
+        Variable g = Variable.build("g");
+        Variable x = Variable.build("x");
+        Variable y = Variable.build("y");
+        Variable a = Variable.build("a");
+        Connector plus = Connector.build(TerminalSymbol.PLUS);
+        Connector times = Connector.build(TerminalSymbol.TIMES);
 
-            //Map each variable(including functions)to the String representation of its Type
-            HashMap<Variable, String> variableTypesString = new HashMap<>();
-            variableTypesString.put(x, "int");
-            variableTypesString.put(y, "double");
-            variableTypesString.put(f, "function");
-            variableTypesString.put(g, "function");
+        LeafNode leaf1 = LeafNode.build(f);
+        LeafNode leaf2 = LeafNode.build(times);
+        LeafNode leaf3 = LeafNode.build(g);
+        LeafNode leaf4 = LeafNode.build(plus);
+        LeafNode leaf5 = LeafNode.build(x);
+        LeafNode leaf6 = LeafNode.build(plus);
+        LeafNode leaf7 = LeafNode.build(y);
+        LeafNode leaf8 = LeafNode.build(a);
 
-            //Map each (String)Type to (String)hierarchies
-            HashMap<String, Set<String>> lowerMap = new HashMap<>();
-            HashMap<String, Set<String>> higherMap = new HashMap<>();
-            HashSet<String> lowerSet = new HashSet<>();
-            HashSet<String> higherSet = new HashSet<>();
+        List<Node> list = new ArrayList<>();
+        list.add(leaf1);
+        list.add(leaf2);
+        list.add(leaf3);
+        list.add(leaf4);
+        list.add(leaf5);
+        list.add(leaf6);
+        list.add(leaf7);
+        list.add(leaf6);
+        list.add(leaf8);
+        internalNode = InternalNode.build(list);
 
-            //populate sets and maps
-            //int type maps
-            lowerSet.add("int");
-            lowerMap.put("int", new HashSet<>(lowerSet));
-            higherSet.add("double");
-            higherMap.put("int", new HashSet<>(higherSet));
+        //Map each variable(including functions)to the String representation of its Type
+        HashMap<Variable, String> variableTypesString = new HashMap<>();
+        variableTypesString.put(x, "int");
+        variableTypesString.put(y, "double");
+        variableTypesString.put(f, "function");
+        variableTypesString.put(g, "function");
+        variableTypesString.put(a, "int");
 
-            //double type maps
-            lowerSet.add("double");
-            lowerMap.put("double", new HashSet<>(lowerSet));
-            higherSet.clear();
-            higherMap.put("double", new HashSet<>(higherSet));
+        //Map each (String)Type to (String)hierarchies
+        HashMap<String, Set<String>> lowerMap = new HashMap<>();
+        HashMap<String, Set<String>> higherMap = new HashMap<>();
+        HashSet<String> lowerSet = new HashSet<>();
+        HashSet<String> higherSet = new HashSet<>();
 
-            //Map that links all variables (not functions) to their types
-            //Collect unique types in hashset
-            HashMap<Variable, Type> variableType = new HashMap<>();
-            HashSet<Type> allTypes = new HashSet<>();
+        //populate sets and maps
+        //int type maps
+        lowerSet.add("int");
+        lowerMap.put("int", new HashSet<>(lowerSet));
+        higherSet.add("double");
+        higherMap.put("int", new HashSet<>(higherSet));
+
+        //double type maps
+        lowerSet.add("double");
+        lowerMap.put("double", new HashSet<>(lowerSet));
+        higherSet.clear();
+        higherMap.put("double", new HashSet<>(higherSet));
+
+        //Map that links all variables (not functions) to their types
+        //Collect unique types in hashset
+        HashSet<Type> allTypes = new HashSet<>();
 
         //
-        allTypes = createAllTypes(variableType, allTypes, variableTypesString);
-
+        createAllTypes(variableType, allTypes, variableTypesString);
         buildTypeSets(allTypes, lowerMap, higherMap);
 
 
@@ -82,7 +87,6 @@ public class Driver {
         functionOutputs.put(f, "int");
         functionOutputs.put(g, "double");
 
-        //build each function
         for (Variable var:variableTypesString.keySet()) {
             if (variableTypesString.get(var).equals("function")) {
                 String inputTypeString = functionInputs.get(var);
@@ -94,22 +98,27 @@ public class Driver {
                 variableType.put(var, funcType);
             }
         }
+    }
 
+    public static void main(String[] args) {
         try {
-            System.out.println(variableType);
+            if (NonTerminalSymbol.EXPRESSION.parse(internalNode.toList()) == ParseState.FAILURE) {
+                //die
+                System.out.println("Invalid Expression");
+                return;
+            }
             internalNode.evaluateTypes(variableType);
+            //System.out.println(internalNode.getCurrentType().toString());
         }
         catch (IncompatibleTypeException e) {
             System.out.println(e.getMessage());
         }
-
-        System.out.println(internalNode.getCurrentType().toString());
     }
 
     //Creates the set of all types that aren't  functions
-    public static HashSet<Type> createAllTypes(HashMap<Variable, Type> variableType,
-                                    HashSet<Type> allTypes,
-                                    HashMap<Variable, String> variableTypesString){
+    private static void createAllTypes(HashMap<Variable, Type> variableType,
+                                       HashSet<Type> allTypes,
+                                       HashMap<Variable, String> variableTypesString){
         //Build all variables (not functions), populate variableType and allTypes
         for (Variable var:variableTypesString.keySet()) {
             if (!variableTypesString.get(var).equals("function")) {
@@ -125,13 +134,12 @@ public class Driver {
                 }
             }
         }
-        return allTypes;
     }
 
     //Builds the higher and lower sets of different types
-    public static void buildTypeSets(HashSet<Type> allTypes,
-                              HashMap<String, Set<String>> lowerMap,
-                              HashMap<String, Set<String>> higherMap){
+    private static void buildTypeSets(HashSet<Type> allTypes,
+                                      HashMap<String, Set<String>> lowerMap,
+                                      HashMap<String, Set<String>> higherMap){
         //Build all type sets (not functions)
         for (Type type:allTypes) {
             //add yourself to lower
@@ -150,4 +158,3 @@ public class Driver {
     }
 
 }
-

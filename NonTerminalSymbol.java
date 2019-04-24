@@ -144,9 +144,9 @@ enum NonTerminalSymbol implements Symbol {
         Connector divide = Connector.build(TerminalSymbol.DIVIDE);
         List<Token> list = new ArrayList<>();
         list.add(a);
-        list.add(plus);
+        //list.add(plus);
         list.add(b);
-        list.add(divide);
+        //list.add(divide);
         list.add(c);
         System.out.println(EXPRESSION.parse(list).getRemainder().toString());
     }
