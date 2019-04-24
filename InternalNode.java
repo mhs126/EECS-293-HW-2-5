@@ -30,6 +30,14 @@ public final class InternalNode implements Node {
         return new ArrayList<>(children);
     }
 
+    /**
+     * getter method for currentType
+     * @return Type currentType of this InternalNode
+     */
+    public Type getCurrentType() {
+        return currentType;
+    }
+
     private InternalNode(List<Node> children) {
         this.children = Collections.unmodifiableList(children);
     }
