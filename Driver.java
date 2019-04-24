@@ -66,11 +66,16 @@ public class Driver {
         higherSet.add("double");
         higherMap.put("int", new HashSet<>(higherSet));
 
+
         //double type maps
         lowerSet.add("double");
         lowerMap.put("double", new HashSet<>(lowerSet));
         higherSet.clear();
         higherMap.put("double", new HashSet<>(higherSet));
+
+        //string type maps
+        higherMap.put("string", new HashSet<>());
+        lowerMap.put("string", new HashSet<>());
 
         //Map that links all variables (not functions) to their types
         //Collect unique types in hashset
