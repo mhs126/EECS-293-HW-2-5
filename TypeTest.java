@@ -12,12 +12,14 @@ public class TypeTest {
     public Type integer;
     public Type dub;
     public Set<Type> integerSet;
+    public Set<Type> highSet;
 
     @Before
     public void createTypes(){
         integer = Type.build("int");
         dub = Type.build("double");
-        integerSet = new HashSet<Type>(Arrays.asList(dub));
+        integerSet = new HashSet<Type>(Arrays.asList(dub, Type.failType));
+        highSet = new HashSet<>(Arrays.asList(dub));
     }
 
     @org.junit.Test
@@ -28,7 +30,7 @@ public class TypeTest {
     @org.junit.Test
     public void addToHigher() {
         integer.addToHigher(dub);
-        assertEquals(integerSet, integer.getHigherSet());
+        assertEquals(highSet, integer.getHigherSet());
         assertEquals(integerSet, integer.getCompatible());
     }
 

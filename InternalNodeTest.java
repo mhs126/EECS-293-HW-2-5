@@ -41,12 +41,12 @@ public class InternalNodeTest {
 
     @Test
     public void get_Current_Type_Nominal() {
-        assertNull(intNode.getCurrentType());
+        assertEquals(Type.failType, intNode.getCurrentType());
     }
 
     @Test
     public void get_Current_Type_Real_Type() {
-        assertNull(intNode.getCurrentType());
+        assertEquals(Type.failType, intNode.getCurrentType());
     }
 
 
