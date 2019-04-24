@@ -81,14 +81,14 @@ public class Type {
     /**
      * build method to create a Type
      * @param name String name of the created Type
-     * @return Type builds a new Type using the cahce
+     * @return Type builds a new Type using the Cache
      */
     public static Type build(String name) {
         return cache.get(name, Type::new);
     }
 
     /**
-     * adds a Type the higher and compatible sets
+     * adds a Type to the higher and compatible sets
      * of this Type
      * @param t Type being added
      */
@@ -98,7 +98,7 @@ public class Type {
     }
 
     /**
-     * adds a Type the lower and compatible sets
+     * adds a Type to the lower and compatible sets
      * of this Type
      * @param t Type being added
      */

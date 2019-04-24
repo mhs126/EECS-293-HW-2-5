@@ -1,33 +1,30 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class DriverTest {
 
-    InternalNode singleLeaf;
+    private InternalNode singleLeaf;
 
-    InternalNode incorrectOperator;
+    private InternalNode incorrectOperator;
 
-    InternalNode badFunctionInput;
+    private InternalNode badFunctionInput;
 
-    InternalNode applyFunction;
+    private InternalNode applyFunctionToFunction;
 
-    InternalNode applyFunction2;
+    private InternalNode applyFunctionToVariable;
 
-    InternalNode andThenFunction;
+    private InternalNode andThenFunctionToFunction;
 
-    InternalNode andThenFunction2;
+    private InternalNode andThenFunctionIncompatibleTypes;
 
-    InternalNode andThenFunction3;
+    private InternalNode andThenFunctionToVariable;
 
-    InternalNode sameType;
+    private InternalNode sameType;
 
-    InternalNode incompatibleTypes;
+    private InternalNode incompatibleTypes;
 
     InternalNode emptyNode = InternalNode.build(new ArrayList<>());
 
@@ -41,7 +38,6 @@ public class DriverTest {
         Connector times = Connector.build(TerminalSymbol.TIMES);
         Connector minus = Connector.build(TerminalSymbol.MINUS);
         Variable s = Variable.build("s");
-        Variable z = Variable.build("z");
 
         LeafNode leaf1 = LeafNode.build(f);
         LeafNode leaf2 = LeafNode.build(times);
@@ -51,45 +47,37 @@ public class DriverTest {
         LeafNode leaf6 = LeafNode.build(plus);
         LeafNode leaf7 = LeafNode.build(y);
         LeafNode leaf8 = LeafNode.build(s);
-        LeafNode leaf9 = LeafNode.build(z);
         LeafNode leaf10 = LeafNode.build(minus);
 
         List<Node> list = new ArrayList<>();
         list.add(leaf5);
         list.add(leaf2);
-        list.add(leaf9);
-        list.add(leaf6);
         list.add(leaf8);
-
         incompatibleTypes = InternalNode.build(list);
 
         List<Node> list1 = new ArrayList<>();
         list1.add(leaf1);
         list1.add(leaf10);
         list1.add(leaf5);
-
         incorrectOperator = InternalNode.build(list1);
 
         List<Node> list2 = new ArrayList<>();
         list2.add(leaf1);
         list2.add(leaf4);
         list2.add(leaf5);
-
         badFunctionInput = InternalNode.build(list2);
 
         List<Node> list3 = new ArrayList<>();
         list3.add(leaf1);
         list3.add(leaf4);
         list3.add(leaf3);
-
-        applyFunction = InternalNode.build(list3);
+        applyFunctionToFunction = InternalNode.build(list3);
 
         List<Node> list4 = new ArrayList<>();
         list4.add(leaf3);
         list4.add(leaf4);
         list4.add(leaf5);
-
-        applyFunction2 = InternalNode.build(list4);
+        applyFunctionToVariable = InternalNode.build(list4);
 
         List<Node> list5 = new ArrayList<>();
         list5.add(leaf1);
@@ -97,8 +85,7 @@ public class DriverTest {
         list5.add(leaf3);
         list5.add(leaf4);
         list5.add(leaf5);
-
-        andThenFunction = InternalNode.build(list5);
+        andThenFunctionToFunction = InternalNode.build(list5);
 
         List<Node> list6 = new ArrayList<>();
         list6.add(leaf3);
@@ -106,26 +93,22 @@ public class DriverTest {
         list6.add(leaf3);
         list6.add(leaf4);
         list6.add(leaf5);
-
-        andThenFunction2 = InternalNode.build(list6);
+        andThenFunctionIncompatibleTypes = InternalNode.build(list6);
 
         List<Node> list7 = new ArrayList<>();
         list7.add(leaf1);
         list7.add(leaf2);
         list7.add(leaf5);
-
-        andThenFunction3 = InternalNode.build(list7);
+        andThenFunctionToVariable = InternalNode.build(list7);
 
         List<Node> list8 = new ArrayList<>();
         list8.add(leaf5);
         list8.add(leaf2);
         list8.add(leaf5);
-
         sameType = InternalNode.build(list8);
 
         List<Node> list9 = new ArrayList<>();
         list9.add(leaf1);
-
         singleLeaf = InternalNode.build(list9);
     }
 
@@ -154,37 +137,37 @@ public class DriverTest {
 
     @Test
     public void main_apply_to_function(){
-        Driver.setInternalNode(applyFunction);
+        Driver.setInternalNode(applyFunctionToFunction);
         Driver.main(null);
     }
 
     @Test
     public void main_apply_to_function_nominal(){
-        Driver.setInternalNode(applyFunction2);
+        Driver.setInternalNode(applyFunctionToVariable);
         Driver.main(null);
     }
 
     @Test
     public void main_and_then_function_nominal(){
-        Driver.setInternalNode(andThenFunction);
+        Driver.setInternalNode(andThenFunctionToFunction);
         Driver.main(null);
     }
 
     @Test
     public void main_and_then_function_bad_input(){
-        Driver.setInternalNode(andThenFunction2);
+        Driver.setInternalNode(andThenFunctionIncompatibleTypes);
         Driver.main(null);
     }
 
     @Test
     public void main_and_then_function_to_value(){
-        Driver.setInternalNode(andThenFunction3);
+        Driver.setInternalNode(andThenFunctionToVariable);
         Driver.main(null);
     }
 
     @Test
     public void main_empty_node(){
-        Driver.setInternalNode(andThenFunction3);
+        Driver.setInternalNode(andThenFunctionToVariable);
         Driver.main(null);
     }
 

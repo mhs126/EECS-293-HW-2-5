@@ -181,8 +181,8 @@ public final class InternalNode implements Node {
             throw new IncorrectInputError("argument for Apply function is a function");
         }
         else {
+            iterateCount = iterateCount + 2;
             if (getLeafTypeFromVarTypes(argumentNode,variableTypes).equals(function.getInputType())) {
-                iterateCount = iterateCount + 2;
                 return function.getOutputType();
             }
             else {
