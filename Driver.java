@@ -2,15 +2,37 @@ import com.sun.org.apache.bcel.internal.classfile.LocalVariableTable;
 
 import java.util.*;
 
+/**
+ * Driver class that runs the typecheck program. Takes user input
+ * using a static block that can be changed. uses HashSets and HashMaps
+ * to compare the different Types of an InternalNode
+ */
+
 public class Driver {
 
+    /**
+     * InternalNode whose root Type is found
+     */
     private static InternalNode internalNode;
+    /**
+     * HashMap that maps variables to their Type
+     * Map is set in the static block
+     */
     private static HashMap<Variable, Type> variableType = new HashMap<>();
 
+    /**
+     * Setter method for the InternalNode Driver runs on
+     * Usually used for test cases
+     * @param inputNode node internalNode is set to
+     */
     public static void setInternalNode(InternalNode inputNode) {
         internalNode = inputNode;
     }
 
+    /**
+     * Static block that sets up the HashMaps and HashSets for
+     * the type checking.
+     */
     static {
         //make an internal node
         Variable f = Variable.build("f");
@@ -108,6 +130,10 @@ public class Driver {
         }
     }
 
+    /**
+     * Main method that runs the evaluateTypes method on internalNode field
+     * @param args main method argument
+     */
     public static void main(String[] args) {
         try {
             if (NonTerminalSymbol.EXPRESSION.parse(internalNode.toList()) == ParseState.FAILURE) {
@@ -123,7 +149,12 @@ public class Driver {
         }
     }
 
-    //Creates the set of all types that aren't  functions
+    /**
+     * Creates the set of allTypes that are not functions
+     * @param variableType maps Variables to their Types
+     * @param allTypes set of allTypes that is adjusted
+     * @param variableTypesString maps the variables to the string representation of their Types
+     */
     private static void createAllTypes(HashMap<Variable, Type> variableType,
                                        HashSet<Type> allTypes,
                                        HashMap<Variable, String> variableTypesString){
@@ -144,7 +175,12 @@ public class Driver {
         }
     }
 
-    //Builds the higher and lower sets of different types
+    /**
+     * Builds the higher and lower sets of different Types
+     * @param allTypes set of all Types
+     * @param lowerMap map used to build lower Type sets
+     * @param higherMap map used to build higher Type sets
+     */
     private static void buildTypeSets(HashSet<Type> allTypes,
                                       HashMap<String, Set<String>> lowerMap,
                                       HashMap<String, Set<String>> higherMap){

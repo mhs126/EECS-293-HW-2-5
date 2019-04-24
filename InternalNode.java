@@ -1,14 +1,28 @@
 //Make lists immutable (use collections)?
 import java.util.*;
 
+/**
+ * An InternalNode is formed from a list of Nodes which is formed by a list
+ * of Tokens. The Node is simplified so all children of the InternalNode are
+ * LeafNodes.
+ */
 public final class InternalNode implements Node {
 
+    /**
+     * List of child nodes of this InternalNode
+     */
     private final List<Node> children;
+    /**
+     * The current Type of this InternalNode
+     */
     private Type currentType;
 
     private Cache<InternalNode, String> cacheString = new Cache<>();
     private Cache<InternalNode, List<Token>> cacheList = new Cache<>();
 
+    /**
+     * An iterator for moving through the list of child Nodes
+     */
     private int iterateCount = 1;
 
     //a getter that returns a copy of the private children.
@@ -76,11 +90,14 @@ public final class InternalNode implements Node {
         return (this.getChildren().size() == 1 && this.getChildren().get(0).getChildren() == null);
     }
 
-    public Type getCurrentType() {
-        return currentType;
-    }
 
-
+    /**
+     * Parses through the children of the InternalNode changing the currentType
+     * based on the Types of the child Nodes. Final expression Type is equal
+     * to the currentType after the evaluateTypes ends.
+     * @param variableTypes maps Variables to their Types
+     * @throws IncompatibleTypeException throws an exception if two Types are incompatible
+     */
     public void evaluateTypes(HashMap<Variable,Type> variableTypes) throws IncompatibleTypeException {
 
         //iterate through children
@@ -112,6 +129,14 @@ public final class InternalNode implements Node {
     }
 
 
+    /**
+     * Evaluates a function and returns its output Type or throws and exception
+     * @param function the function being evaluated
+     * @param variableTypes maps Variables to their Types
+     * @return Type the output Type of the function
+     * @throws IncorrectOperatorException throws if - or / are used after a function
+     * @throws IncorrectInputError throws if a function is given no arguments
+     */
     private Type evaluateFunction(Function function, HashMap<Variable,Type> variableTypes) throws IncorrectOperatorException, IncorrectInputError {
         if (iterateCount + 1 >= children.size()) {
             throw new IncorrectInputError("Function has no argument");
@@ -134,6 +159,15 @@ public final class InternalNode implements Node {
         }
     }
 
+    /**
+     * evaluates a function with its given input
+     * abstraction from evaluateFunction
+     * @param function function being evaluated
+     * @param variableTypes maps Variables to their Types
+     * @param argumentNode Node containing the Function
+     * @return Type the output Type of the function
+     * @throws IncorrectInputError throws an exception if the function has the wrong input Type
+     */
     private Type evaluateApplyFunction(Function function, HashMap<Variable,Type> variableTypes, Node argumentNode) throws IncorrectInputError{
         if (getLeafTypeFromVarTypes(argumentNode, variableTypes).isFunction()) {
             throw new IncorrectInputError("argument for Apply function is a function");
@@ -149,6 +183,16 @@ public final class InternalNode implements Node {
         }
     }
 
+    /**
+     * evaluates a Function with the result of a function being
+     * applied to it. Abstraction from evaluateFunction
+     * @param function Function being evaluated
+     * @param variableTypes maps Variables to their Types
+     * @param argumentNode Node containing the Function
+     * @return Type the output Type of the function
+     * @throws IncorrectInputError throws an exception if the function has the wrong input Type
+     * @throws IncorrectOperatorException throws an exception from evaluateFunction
+     */
     private Type evaluateAndThenFunction(Function function, HashMap<Variable,Type> variableTypes, Node argumentNode) throws IncorrectInputError, IncorrectOperatorException{
         if (getLeafTypeFromVarTypes(argumentNode, variableTypes).isFunction()) {
             iterateCount = iterateCount + 2;
@@ -166,11 +210,23 @@ public final class InternalNode implements Node {
     }
 
 
-    //only call this when you know the leafNode is a variable, because it is sus
+    /**
+     * gets the Type of a LeafNode from the input HashMap
+     * @param child reference Node (key to variableTypes maps)
+     * @param variableTypes maps Variables to their Types
+     * @return Type Type contained within reference Node
+     */
     private Type getLeafTypeFromVarTypes(Node child, HashMap<Variable,Type> variableTypes) {
         return variableTypes.get(child.toList().get(0));
     }
 
+    /**
+     * calculates teh greater of two Types
+     * @param first first input Type
+     * @param second second input Type
+     * @return Types greater of the two input Types
+     * @throws IncompatibleTypeException throws exception if two input Types are incompatible
+     */
     private static Type calcHigher(Type first, Type second) throws IncompatibleTypeException {
         if (first.getHigherSet().contains(second)) {
             return second;
