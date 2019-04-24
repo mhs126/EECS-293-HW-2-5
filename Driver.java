@@ -18,6 +18,7 @@ public class Driver {
         Variable x = Variable.build("x");
         Variable y = Variable.build("y");
         Variable a = Variable.build("a");
+        Variable s = Variable.build("s");
         Connector plus = Connector.build(TerminalSymbol.PLUS);
         Connector times = Connector.build(TerminalSymbol.TIMES);
 
@@ -29,6 +30,7 @@ public class Driver {
         LeafNode leaf6 = LeafNode.build(plus);
         LeafNode leaf7 = LeafNode.build(y);
         LeafNode leaf8 = LeafNode.build(a);
+        LeafNode leaf9 = LeafNode.build(s);
 
         List<Node> list = new ArrayList<>();
         list.add(leaf1);
@@ -49,6 +51,7 @@ public class Driver {
         variableTypesString.put(f, "function");
         variableTypesString.put(g, "function");
         variableTypesString.put(a, "int");
+        variableTypesString.put(s, "string");
 
         //Map each (String)Type to (String)hierarchies
         HashMap<String, Set<String>> lowerMap = new HashMap<>();
