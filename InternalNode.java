@@ -14,8 +14,9 @@ public final class InternalNode implements Node {
     private final List<Node> children;
     /**
      * The current Type of this InternalNode
+     * Initially set to failType
      */
-    private Type currentType;
+    private Type currentType = Type.failType;
 
     private Cache<InternalNode, String> cacheString = new Cache<>();
     private Cache<InternalNode, List<Token>> cacheList = new Cache<>();

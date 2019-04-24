@@ -142,7 +142,7 @@ public class Driver {
                 return;
             }
             internalNode.evaluateTypes(variableType);
-            //System.out.println(internalNode.getCurrentType().toString());
+            System.out.println(internalNode.getCurrentType().toString());
         }
         catch (IncompatibleTypeException e) {
             System.out.println(e.getMessage());

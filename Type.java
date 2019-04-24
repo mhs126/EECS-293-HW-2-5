@@ -15,19 +15,29 @@ public class Type {
      * String representation of the Type
      */
     private String name;
+
     /**
      * set of higher Types
      */
     private Set<Type> higherSet = new HashSet<>();
+
     /**
      * set of lower types
      */
     private Set<Type> lowerSet = new HashSet<>();
+
     /**
      * set of all compatible types
      * the combination of the higher and lower sets
      */
     private Set<Type> compatible = new HashSet<>();
+
+    /**
+     * Base case for a Type
+     * All Types have failType as a lower Type
+     */
+    public static Type failType = new Type("Failure");
+
 
 
     /**
@@ -67,6 +77,7 @@ public class Type {
      */
     Type(String name){
         this.name = name;
+        this.addToLower(failType);
     }
 
     /**
